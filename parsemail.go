@@ -322,7 +322,7 @@ func parseMultipartMixed(msg io.Reader, boundary string) (textBody, htmlBody str
                     return textBody, htmlBody, attachments, embeddedFiles, err
                 }
 
-    t            attachments = append(attachments, at)
+                attachments = append(attachments, at)
             default:
                 return textBody, htmlBody, attachments, embeddedFiles, fmt.Errorf("Unknown multipart/mixed nested mime type: %s", contentType)
         }
@@ -491,8 +491,6 @@ func decodeContent(content io.Reader, encoding string) (io.Reader, error) {
         }
 
         return bytes.NewReader(dd), nil
-    case "8bit":
-        return content, nil
     case "":
         return content, nil
     default:
