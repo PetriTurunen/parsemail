@@ -498,7 +498,7 @@ func decodeContent(content io.Reader, encoding string) (io.Reader, error) {
 			return nil, err
 		}
 
-		return bytes.NewReader(dd), nil
+		return bytes.NewReader(b), nil
 	case "":
 		return content, nil
 	default:
