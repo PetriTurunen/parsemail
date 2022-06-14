@@ -28,18 +28,18 @@ const contentAttachment = "attachment"
 func Parse(r io.Reader) (email Email, err error) {
 	msg, err := mail.ReadMessage(r)
 	if err != nil {
-		return _, err
+		return nil, err
 	}
 
 	email, err = createEmailFromHeader(msg.Header)
 	if err != nil {
-		return _, err
+		return nil, err
 	}
 
 	email.ContentType = msg.Header.Get("Content-Type")
 	contentType, params, err := parseContentType(email.ContentType)
 	if err != nil {
-		return _, err
+		return nil, err
 	}
 
 	switch contentType {
@@ -56,12 +56,12 @@ func Parse(r io.Reader) (email Email, err error) {
 		var reader io.Reader
 		reader, err = decodeContent(strings.NewReader(string(message[:])), msg.Header.Get("Content-Transfer-Encoding"))
 		if err != nil {
-			return _, err
+			return nil, err
 		}
 
 		message, err = ioutil.ReadAll(reader)
 		if err != nil {
-			return _, err
+			return nil, err
 		}
 
 		email.TextBody = strings.TrimSuffix(string(message[:]), "\n")
@@ -70,19 +70,19 @@ func Parse(r io.Reader) (email Email, err error) {
 		var reader io.Reader
 		reader, err = decodeContent(strings.NewReader(string(message[:])), msg.Header.Get("Content-Transfer-Encoding"))
 		if err != nil {
-			return _, err
+			return nil, err
 		}
 
 		message, err = ioutil.ReadAll(reader)
 		if err != nil {
-			return _, err
+			return nil, err
 		}
 
 		email.HTMLBody = strings.TrimSuffix(string(message[:]), "\n")
 	default:
 		email.Content, err = decodeContent(msg.Body, msg.Header.Get("Content-Transfer-Encoding"))
 		if err != nil {
-                        return _, err
+                        return nil, err
                 }
 	}
 
