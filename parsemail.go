@@ -403,7 +403,7 @@ func decodeMimeSentence(s string) string {
 	ss := strings.Split(s, " ")
 	var lastWord string
 
-	for _, word := range ss {
+	for i, word := range ss {
 		dec := new(mime.WordDecoder)
 		w, err := dec.Decode(word)
 		if err != nil {
@@ -418,8 +418,8 @@ func decodeMimeSentence(s string) string {
 				}
 			}
 
-			// when errInvalidWord, add a space
-			if err.Error() == errInvalidWord {
+			// when errInvalidWord, add a spacea only if not is the last word
+			if err.Error() == errInvalidWord && i != len(ss)-1 {
 				w += " "
 			}
 
